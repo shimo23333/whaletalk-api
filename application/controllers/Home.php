@@ -82,64 +82,6 @@ class Home extends CI_Controller {
 
 		response(TRUE, 200);
 	}
-
-
-	public function GetMessages()
-	{
-		$wid  = $this->input->get('wid');
-		$uid  = $this->input->get('uid');
-
-		$this->load->model("message_model");
-		$messages = $this->message_model->get_list($wid, $uid);
-		response($messages, 200);
-	}
-
-
-	public function AddMessage()
-	{
-		$wid  = $this->input->get('wid');
-		$uid  = $this->input->get('uid');
-		$type  = $this->input->get('type');
-		$content  = $this->input->get('content');
-
-		$this->load->model("message_model");
-		try {
-			$this->message_model->add($wid, $uid, $type, $content);
-		} catch (Exception $e){
-			response("新增失敗", 500);
-		}
-		response(TRUE, 200);
-	}
-
-
-	public function UpdateMessage()
-	{
-		$id  = $this->input->get('id');
-		$type  = $this->input->get('type');
-		$content  = $this->input->get('content');
-
-		$this->load->model("message_model");
-		try {
-			$this->message_model->update($id, $type, $content);
-		} catch (Exception $e){
-			response("更新失敗", 500);
-		}
-		response(TRUE, 200);
-	}
-
-
-	public function RemoveMessage()
-	{
-		$id  = $this->input->get('id');
-
-		$this->load->model("message_model");
-		try {
-			$this->message_model->remove($id);
-		} catch (Exception $e){
-			response("刪除失敗", 500);
-		}
-		response(TRUE, 200);
-	}
 }
 
 ?>

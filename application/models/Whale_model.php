@@ -14,7 +14,7 @@ class Whale_model extends CI_Model {
      */
     public function get_list_by_account($uid)
     {
-        $this->db->select('whale.*');
+        $this->db->select('whale.*, whale_member.is_admin');
 		$this->db->join('whale_member', 'whale_member.wid = whale.wid');
         $this->db->where('whale_member.uid', $uid);
         return $this->db->get('whale')->result_array();
@@ -91,6 +91,12 @@ class Whale_model extends CI_Model {
 	public function join($wid, $uid)
 	{
 		$is_admin = TRUE; 
+
+        $this->db->where('wid', $wid);
+        $results = $this->db->get('whale_member')->result_array();
+        if (sizeof($results) > 0) {
+            $is_admin = FALSE;
+        }
 
 		$data = array(
             'wid'  => $wid,

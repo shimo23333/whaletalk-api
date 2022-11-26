@@ -6,11 +6,25 @@
 class Account_model extends CI_Model {
 
 
+    /**
+     * 用 email 取得使用者資訊
+     *
+     * @param string $email email
+     * @return array
+     */
+    public function get_by_email($email)
+    {
+        $this->db->where('email', $email);
+        $results = $this->db->get('account')->result_array();
+        return isset($results[0]) ? $results[0] : NULL;
+    }
+
+
 	/**
-     * 取得使用者資訊
+     * 用 uid 取得使用者資訊
      *
      * @param int $uid UID
-     * @return bool
+     * @return array
      */
 	public function get_by_uid($uid)
 	{
@@ -76,14 +90,14 @@ class Account_model extends CI_Model {
     /**
      * 用 Google 登入資料註冊會員
      */
-    public function register_by_google_data($email, $name, $locale, $picture) 
+    public function register_by_google_data($email, $name, $picture) 
     {
         // 記錄從 google 傳來的資料
         $data = array(
             'email'   => $email,
             'name'    => $name,
             'picture' => $picture,
-            'add_at' => date("Y-m-d H:i:s"),
+            'last_login_at' => date("Y-m-d H:i:s"),
             'uid'     => $this->create_uid()
         );
 
@@ -94,7 +108,7 @@ class Account_model extends CI_Model {
     /**
      * 更新 Google 會員資料
      */
-    public function update_by_google_data($email, $name, $locale, $picture)
+    public function update_by_google_data($email, $name, $picture)
     {
         $data = array(
             'picture' => $picture

@@ -18,7 +18,22 @@ class Message_model extends CI_Model {
         $this->db->select('message.*');
         $this->db->where('wid', $wid);
 		$this->db->where('uid', $uid);
+        $this->db->order_by('id', 'DESC');
         return $this->db->get('message')->result_array();
+    }
+
+    /**
+     * 取得 Whale 歷史訊息
+     *
+     * @param string $id       訊息 id
+     * @return array
+     */
+    public function get_by_id($id)
+    {
+        $this->db->select('message.*');
+        $this->db->where('id', $id);
+        $results = $this->db->get('message')->result_array();
+        return isset($results[0]) ? $results[0] : NULL;
     }
 
 
@@ -28,14 +43,14 @@ class Message_model extends CI_Model {
      * @param string $wid WID
      * @return array
      */
-    public function add($wid, $uid, $type, $content, $repeat_time = null)
+    public function add($wid, $uid, $type, $content, $schedule_time = null)
     {
         $data = array(
             'wid'  			=> $wid,
 			'uid'  			=> $uid,
-			'type'  		=> $wid,
+			'type'  		=> $type,
             'content'  		=> $content,
-            'repeat_time'   => $repeat_time
+            'schedule_time' => $schedule_time
         );
 
         return $this->db->insert('message', $data);
@@ -48,13 +63,13 @@ class Message_model extends CI_Model {
      * @param string $id ID
      * @return array
      */
-	public function update($id, $type, $content, $repeat_time = null)
+	public function update($id, $type, $content, $schedule_time = null)
 	{
         $this->db->where('id', $id);
 		$data = array(
 			'type' => $type,
 			'content' => $content,
-			'repeat_time' => $repeat_time
+			'schedule_time' => $schedule_time
 		);
         return $this->db->update('message', $data);
 	}
