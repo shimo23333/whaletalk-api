@@ -12,6 +12,17 @@ class Message extends CI_Controller {
 		response($messages, 200);
 	}
 
+	public function GetList()
+	{
+		$wid  = $this->input->get('wid');
+		$sts  = $this->input->get('sts');
+		$ste  = $this->input->get('ste');
+
+		$this->load->model("message_model");
+		$messages = $this->message_model->get_list($wid, null, $sts, $ste);
+		response($messages, 200);
+	}
+
 	public function Get()
 	{
 		$id  = $this->input->get('id');
@@ -28,10 +39,11 @@ class Message extends CI_Controller {
 		$uid  = $this->input->get('uid');
 		$type  = $this->input->get('type');
 		$content  = $this->input->get('content');
+		$schedule_time  = $this->input->get('schedule_time');
 
 		$this->load->model("message_model");
 		try {
-			$this->message_model->add($wid, $uid, $type, $content);
+			$this->message_model->add($wid, $uid, $type, $content, $schedule_time);
 		} catch (Exception $e){
 			response("新增失敗", 500);
 		}
