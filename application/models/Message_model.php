@@ -13,21 +13,27 @@ class Message_model extends CI_Model {
      * @param string $uid       使用者 uid
      * @return array
      */
-    public function get_list($wid, $uid, $schedule_time_start = null, $schedule_time_end = null)
+    public function get_list($wid, $uid, $type=null, $schedule_time_start = null, $schedule_time_end = null)
     {
-        $this->db->select('message.*, account.name, account.picture');
+        $this->db->select('message.*');
         $this->db->where('wid', $wid);
 
 		if ($uid) {
 			$this->db->where('uid', $uid);
 		}
 
+        if ($type) {
+            $this->db->where('type', $type);
+        }
+
 		if ($schedule_time_start && $schedule_time_end) {
+			$this->db->select('account.name, account.picture');
 			$this->db->where('schedule_time >=', $schedule_time_start);
 			$this->db->where('schedule_time <=', $schedule_time_end);
+			$this->db->join('account', 'account.uid = message.uid');
 		}
 
-		$this->db->join('account', 'account.uid = message.uid');
+		
 
         $this->db->order_by('id', 'DESC');
         return $this->db->get('message')->result_array();

@@ -17,9 +17,10 @@ class Message extends CI_Controller {
 		$wid  = $this->input->get('wid');
 		$sts  = $this->input->get('sts');
 		$ste  = $this->input->get('ste');
+		$type  = $this->input->get('type');
 
 		$this->load->model("message_model");
-		$messages = $this->message_model->get_list($wid, null, $sts, $ste);
+		$messages = $this->message_model->get_list($wid, null, $type, $sts, $ste);
 		response($messages, 200);
 	}
 
